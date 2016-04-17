@@ -1,0 +1,155 @@
+﻿<html>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<style type="text/css">
+#map {
+  width: 100%;
+  height: 500px;
+  border: 1px solid #000;
+}
+</style>
+<script type="text/javascript">
+
+(function() {
+  window.onload = function() { 
+    getLocation();       
+  }
+})();
+
+function getLocation(){
+	if (navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(showLocation);
+	}
+	else{
+		alert("Geolocation is not supported by this browser.");
+	}
+}
+
+
+function showLocation(currLocation){
+	// Creating a reference to the mapDiv
+    var mapDiv = document.getElementById('map');
+    
+    // Creating a latLng for the center of the map
+    var latlng = new google.maps.LatLng(currLocation.coords.latitude, currLocation.coords.longitude);
+    
+    // Creating an object literal containing the properties 
+    // we want to pass to the map  
+    var options = {
+      center: latlng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    
+    // Creating the map
+    var map = new google.maps.Map(mapDiv, options);
+
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(currLocation.coords.latitude, currLocation.coords.longitude),
+        map: map,
+        draggable: true,
+        title: 'Set lat/lon values for this property'
+    });  
+	
+	// The default values
+	getMarkerLocation(marker);
+	setStartingDate();
+	setStartingTime();
+	
+	google.maps.event.addListener(marker, "dragend", function(latLng) {        
+        getMarkerLocation(marker);
+    });
+}
+
+function getMarkerLocation(marker){
+	setLocation(marker.getPosition().lat(), "latitude");
+	setLocation(marker.getPosition().lng(), "longitude");
+}
+
+function setLocation(val, elem){
+	document.getElementById(elem).value = val;
+}
+
+function setStartingDate(){
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1;
+	if (mm < 10){ mm = '0' + mm; }
+	var yyyy = today.getFullYear();
+	setLocation(dd, "validation_date_day");
+	setLocation(mm, "validation_date_month");
+	setLocation(yyyy, "validation_date_year");
+}
+
+function setStartingTime(){
+	var today = new Date();
+	var hh = today.getHours();
+	var mm = today.getMinutes();
+	hhmm = hh+':'+mm+':00';
+	setLocation(hhmm, "validation_time");
+	alert(hhmm);
+}
+
+</script>
+
+<body>
+<div id="map"></div>
+
+<form method="input" action="add_ticket.php" method="get" name="ticket_info" target="_self">
+	<label for="code">Κωδικός Εισητηρίου: </label><input id="code" name="code" /><br />
+	<label for="latitude">Γεωγραφικό Πλάτος: </label><input id="latitude" name="latitude" readonly /><br />
+	<label for="longitude">Γεωγραφικό Ύψος: </label><input id="longitude" name="longitude" readonly /> <br />
+	<label for="validation_time">Ώρα Ακύρωσης: </label>
+	<select name="validation_time" id="validation_time">
+		<option value="00:00:00">00:00</option><option value="00:15:00">00:15</option><option value="00:30:00">00:30</option><option value="00:45:00">00:45</option>
+		<option value="01:00:00">01:00</option><option value="01:15:00">01:15</option><option value="01:30:00">01:30</option><option value="01:45:00">01:45</option>
+		<option value="02:00:00">02:00</option><option value="02:15:00">02:15</option><option value="02:30:00">02:30</option><option value="02:45:00">02:45</option>
+		<option value="03:00:00">03:00</option><option value="03:15:00">03:15</option><option value="03:30:00">03:30</option><option value="03:45:00">03:45</option>
+		<option value="04:00:00">04:00</option><option value="04:15:00">04:15</option><option value="04:30:00">04:30</option><option value="04:45:00">04:45</option>
+		<option value="05:00:00">05:00</option><option value="05:15:00">05:15</option><option value="05:30:00">05:30</option><option value="05:45:00">05:45</option>
+		<option value="06:00:00">06:00</option><option value="06:15:00">06:15</option><option value="06:30:00">06:30</option><option value="06:45:00">06:45</option>
+		<option value="07:00:00">07:00</option><option value="07:15:00">07:15</option><option value="07:30:00">07:30</option><option value="07:45:00">07:45</option>
+		<option value="08:00:00">08:00</option><option value="08:15:00">08:15</option><option value="08:30:00">08:30</option><option value="08:45:00">08:45</option>
+		<option value="09:00:00">09:00</option><option value="09:15:00">09:15</option><option value="09:30:00">09:30</option><option value="09:45:00">09:45</option>
+		<option value="10:00:00">10:00</option><option value="10:15:00">10:15</option><option value="10:30:00">10:30</option><option value="10:45:00">10:45</option>
+		<option value="11:00:00">11:00</option><option value="11:15:00">11:15</option><option value="11:30:00">11:30</option><option value="11:45:00">11:45</option>
+		<option value="12:00:00">12:00</option><option value="12:15:00">12:15</option><option value="12:30:00">12:30</option><option value="12:45:00">12:45</option>
+		<option value="13:00:00">13:00</option><option value="13:15:00">13:15</option><option value="13:30:00">13:30</option><option value="13:45:00">13:45</option>
+		<option value="14:00:00">14:00</option><option value="14:15:00">14:15</option><option value="14:30:00">14:30</option><option value="14:45:00">14:45</option>
+		<option value="15:00:00">15:00</option><option value="15:15:00">15:15</option><option value="15:30:00">15:30</option><option value="15:45:00">15:45</option>
+		<option value="16:00:00">16:00</option><option value="16:15:00">16:15</option><option value="16:30:00">16:30</option><option value="16:45:00">16:45</option>
+		<option value="17:00:00">17:00</option><option value="17:15:00">17:15</option><option value="17:30:00">17:30</option><option value="17:45:00">17:45</option>
+		<option value="18:00:00">18:00</option><option value="18:15:00">18:15</option><option value="18:30:00">18:30</option><option value="18:45:00">18:45</option>
+		<option value="19:00:00">19:00</option><option value="19:15:00">19:15</option><option value="19:30:00">19:30</option><option value="19:45:00">19:45</option>
+		<option value="20:00:00">20:00</option><option value="20:15:00">20:15</option><option value="20:30:00">20:30</option><option value="20:45:00">20:45</option>
+		<option value="21:00:00">21:00</option><option value="21:15:00">21:15</option><option value="21:30:00">21:30</option><option value="21:45:00">21:45</option>
+		<option value="22:00:00">22:00</option><option value="22:15:00">22:15</option><option value="22:30:00">22:30</option><option value="22:45:00">22:45</option>
+		<option value="23:00:00">23:00</option><option value="23:15:00">23:15</option><option value="23:30:00">23:30</option><option value="23:45:00">23:45</option>
+	</select><br />
+	
+	<label for="validation_date">Ημ/νία Ακύρωσης: </label>
+	<select name="validation_date_day" id="validation_date_day">
+		<option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option>
+		<option value="06">06</option><option value="07">07</option><option value="07">07</option><option value="08">08</option><option value="09">09</option>
+		<option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
+		<option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option>
+		<option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option>
+		<option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option>
+		<option value="30">30</option><option value="31">31</option>
+	</select>
+	<select name="validation_date_month" id="validation_date_month">
+		<option value="01">Ιαν</option><option value="02">Φεβ</option><option value="03">Μαρ</option><option value="04">Απρ</option>
+		<option value="05">Μαϊ</option><option value="06">Ιουν</option><option value="07">Ιουλ</option><option value="08">Αυγ</option>
+		<option value="09">Σεπ</option><option value="10">Οκτ</option><option value="11">Νοε</option><option value="12">Δεκ</option>
+	</select>
+	<select name="validation_date_year" id="validation_date_year">
+		<option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option>
+	</select><br />
+	
+	<label for="ticket_type">Τύπος Εισητηρίου: </label><br />	
+		<label for="ticket_type">Ολόκληρο(90 λεπτών) </label><input type="radio" value="regular" name="ticket_type" /> <br />
+		<label for="ticket_type">Μειωμένο(90 λεπτών) </label><input type="radio" value="reduced" name="ticket_type" /> <br />
+	<input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
